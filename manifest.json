@@ -2,20 +2,21 @@
   "name": "BAU Field Analysis System",
   "short_name": "BAU Field",
   "description": "FBI First Bots of Independence 1723 — Behavioral Analysis Unit Field Analysis System",
-  "start_url": "/",
+  "start_url": "/fbi-1723-bau/",
+  "scope": "/fbi-1723-bau/",
   "display": "standalone",
   "orientation": "landscape",
   "background_color": "#06080b",
   "theme_color": "#70be46",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "/fbi-1723-bau/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "/fbi-1723-bau/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
