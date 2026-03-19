@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BAU Field Analysis System // FBI First Bots of Independence</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="manifest" href="/fbi-1723-bau/manifest.json">
+<link rel="apple-touch-icon" href="/fbi-1723-bau/icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2218,7 +2218,7 @@ function resetSelection() {
 // Register Service Worker for offline PWA support
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register('/fbi-1723-bau/sw.js')
       .then(function(reg) {
         console.log('BAU: Service worker registered', reg.scope);
       })
