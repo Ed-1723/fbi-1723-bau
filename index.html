@@ -1745,19 +1745,7 @@ setupFileInput('csvTba', function(text) {
   }
 });
 
-setupFileInput('csvReload', function(text) {
-  saveToStorage(LS_MATCH, text);
-  matchRows = parseCSVText(text);
-  teamMap = aggregateMatch(matchRows);
-  applyTBABlend();
-  updateHeaderStatus();
-  populateDropdown();
-  buildCats();
-  renderTop10('blendedFuel');
-  renderSelection('blendedFuel');
-  var v = document.getElementById('teamInput');
-  if (v && v.value) onSearch(v.value);
-});
+// csvReload removed - now using csvMatchReload in header
 
 // Wire match reload button
 setupFileInput('csvMatchReload', function(text) {
@@ -2168,9 +2156,9 @@ function renderProfile(t) {
         tbaBox('OPR', tba.opr.toFixed(1), '<span class="tba-delta '+oprDeltaCls+'">'+oprDeltaStr+' vs avg</span>') +
         tbaBox('Auto Fuel', tba.autoFuel.toFixed(1), '') +
         tbaBox('Tele Fuel', tba.teleFuel.toFixed(1), '') +
+        tbaBox('Endgame Fuel', tba.endgameFuel.toFixed(1), '') +
         tbaBox('Total Fuel', tba.totalFuel.toFixed(1), '') +
         tbaBox('Tower Pts', tba.totalTower.toFixed(1), '') +
-        tbaBox('Minor Fouls', tba.minorFouls.toFixed(2), '') +
       '</div>' +
       '<div style="padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;font-family:\'Courier New\',Courier,monospace;font-size:10px;letter-spacing:1px;color:'+fuelNoteColor+'">&#9646; SCOUTING VS TBA: '+fuelNote+'</div>' +
     '</div>';
@@ -2488,15 +2476,23 @@ var CATS = [
 var activeCat = 'avgFuel';
 
 function buildCats() {
-  document.getElementById('catRow').innerHTML = CATS.map(function(c) {
-    return '<button class="cat-btn'+(c.key===activeCat?' active':'')+'" onclick="renderTop10(\''+c.key+'\')">'+c.label+'</button>';
-  }).join('');
+  var el = document.getElementById('catRow');
+  if (!el) return;
+  el.innerHTML = '';
+  CATS.forEach(function(cat) {
+    var btn = document.createElement('button');
+    btn.className = 'cat-btn' + (cat.key === activeCat ? ' active' : '');
+    btn.textContent = cat.label;
+    btn.setAttribute('data-key', cat.key);
+    btn.onclick = function() { renderTop10(cat.key); };
+    el.appendChild(btn);
+  });
 }
 
 function renderTop10(catKey) {
   activeCat = catKey;
-  document.querySelectorAll('.cat-btn').forEach(function(b, i) {
-    if (CATS[i]) b.classList.toggle('active', CATS[i].key === catKey);
+  document.querySelectorAll('.cat-btn').forEach(function(b) {
+    b.classList.toggle('active', b.textContent.trim() === (CATS.filter(function(x){ return x.key===catKey; })[0] || {}).label);
   });
 
   var cat = CATS.filter(function(c){ return c.key===catKey; })[0];
