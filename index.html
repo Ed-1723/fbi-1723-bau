@@ -2407,31 +2407,50 @@ function pullSchedule() {
 function renderSchedule(myTeam) {
   var grid = document.getElementById('schedGrid');
   grid.style.display = 'grid';
+  // Store match lookup by card ID for click handler
+  window._schedLookup = {};
+
   grid.innerHTML = scheduleData.map(function(m) {
     var red = m.alliances.red.team_keys.map(function(k){ return k.replace('frc',''); });
     var blue = m.alliances.blue.team_keys.map(function(k){ return k.replace('frc',''); });
     var isRed = myTeam && red.indexOf(myTeam) >= 0;
     var isBlue = myTeam && blue.indexOf(myTeam) >= 0;
     var ourSide = isRed ? 'red' : isBlue ? 'blue' : '';
+    var cardId = 'sched_q' + m.match_number;
+
+    // Store for click handler
+    window._schedLookup[cardId] = { red: red, blue: blue, ourSide: ourSide };
 
     function teamLabel(num) {
-      var name = teamNames[num] ? ' <span style="font-size:9px;opacity:0.7">'+teamNames[num]+'</span>' : '';
+      var name = teamNames[num] ? ' <span style="font-size:9px;opacity:0.7">' + teamNames[num] + '</span>' : '';
       var bold = (num === myTeam) ? 'font-weight:bold;text-decoration:underline' : '';
-      return '<span style="'+bold+'">'+num+'</span>'+name;
+      return '<span style="' + bold + '">' + num + '</span>' + name;
     }
 
-    return '<div class="sched-card'+(ourSide?' sched-ours-'+ourSide:'')+'" onclick="loadMatch('+JSON.stringify(red)+','+JSON.stringify(blue)+',''+ourSide+'',this)">' +
+    var sideColor = ourSide === 'red' ? 'var(--red)' : 'var(--cyan)';
+    var cardClass = 'sched-card' + (ourSide ? ' sched-ours-' + ourSide : '');
+
+    return '<div class="' + cardClass + '" id="' + cardId + '" onclick="clickSchedCard(this)">' +
       '<div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<div class="sched-match-num">Q'+m.match_number+'</div>' +
-        (ourSide ? '<div style="font-family:'Courier New',monospace;font-size:9px;color:'+(ourSide==='red'?'var(--red)':'var(--cyan)')+';letter-spacing:1px">'+ourSide.toUpperCase()+'</div>' : '') +
+        '<div class="sched-match-num">Q' + m.match_number + '</div>' +
+        (ourSide ? '<div style="font-family:Courier New,monospace;font-size:9px;color:' + sideColor + ';letter-spacing:1px">' + ourSide.toUpperCase() + '</div>' : '') +
       '</div>' +
       '<div class="sched-teams">' +
-        '<span class="sched-red">'+red.map(teamLabel).join(' / ')+'</span><br>' +
-        '<span class="sched-blue">'+blue.map(teamLabel).join(' / ')+'</span>' +
+        '<span class="sched-red">' + red.map(teamLabel).join(' / ') + '</span><br>' +
+        '<span class="sched-blue">' + blue.map(teamLabel).join(' / ') + '</span>' +
       '</div>' +
     '</div>';
   }).join('');
 }
+
+function clickSchedCard(el) {
+  var data = window._schedLookup[el.id];
+  if (!data) return;
+  document.querySelectorAll('.sched-card').forEach(function(c){ c.classList.remove('active-match'); });
+  el.classList.add('active-match');
+  loadMatch(data.red, data.blue, data.ourSide);
+}
+
 
 function loadMatch(red, blue, ourSide, el) {
   document.querySelectorAll('.sched-card').forEach(function(c){ c.classList.remove('active-match'); });
