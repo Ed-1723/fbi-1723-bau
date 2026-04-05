@@ -27,10 +27,10 @@
   --red:      #ff2244;
   --yellow:   #ffd000;
   --cyan:     #00aaff;
-  --text:     #d8ecd0;
-  --text2:    #7a9870;
-  --text3:    #3a5535;
-  --white:    #edfce5;
+  --text:     #e8f5e0;
+  --text2:    #a8c898;
+  --text3:    #6a9060;
+  --white:    #f5fff0;
   --gold:     #ffd700;
   --silver:   #b8c8d8;
   --bronze:   #cd8040;
@@ -44,6 +44,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  font-size: 15px;
 }
 
 /* Subtle scanline overlay */
@@ -100,7 +101,7 @@ body::before {
 }
 
 .overlay p {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text2);
   text-align: center;
   max-width: 480px;
@@ -133,7 +134,7 @@ body::before {
 
 .load-box-title {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 2px;
   color: var(--text3);
   text-transform: uppercase;
@@ -142,7 +143,7 @@ body::before {
 
 .load-box-status {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text3);
   margin-top: 8px;
 }
@@ -250,9 +251,9 @@ header {
   background: transparent;
   border: none;
   border-bottom: 3px solid transparent;
-  color: var(--text3);
+  color: var(--text2);
   font-family: 'Trebuchet MS', Arial, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -291,7 +292,7 @@ header {
 
 .panel-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 2px;
   color: var(--text3);
   text-transform: uppercase;
@@ -355,8 +356,8 @@ header {
 
 .reliability-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
-  color: var(--text3);
+  font-size: 12px;
+  color: var(--text2);
   letter-spacing: 2px;
   margin: 6px 0 4px;
 }
@@ -370,10 +371,10 @@ header {
 .tag-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
 
 .tag {
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 2px;
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -398,7 +399,7 @@ header {
 
 .stat-box-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -418,7 +419,7 @@ header {
 .stat-box-val.c-yellow { color: var(--yellow); }
 .stat-box-val.c-red { color: var(--red); }
 
-.stat-box-sub { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.stat-box-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
 
 /* ===== PERFORMANCE BARS (two-tone) ===== */
 .perf-bars { display: flex; flex-direction: column; gap: 12px; }
@@ -427,7 +428,7 @@ header {
 
 .perf-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text2);
   width: 120px;
   flex-shrink: 0;
@@ -475,7 +476,7 @@ header {
 
 .perf-val {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text);
   width: 40px;
   flex-shrink: 0;
@@ -484,7 +485,7 @@ header {
 
 .perf-pct {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text3);
   width: 56px;
   flex-shrink: 0;
@@ -501,15 +502,15 @@ header {
 /* ===== TENDENCIES TABLE ===== */
 .tend-table { width: 100%; border-collapse: collapse; }
 .tend-table td {
-  padding: 8px 4px;
-  border-bottom: 1px solid var(--bg3);
+  padding: 9px 6px;
+  border-bottom: 1px solid var(--border);
   vertical-align: middle;
-  font-size: 13px;
+  font-size: 15px;
 }
 .tend-table tr:last-child td { border-bottom: none; }
 .tend-table td:first-child {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text2);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -517,8 +518,9 @@ header {
 }
 .tend-table td:last-child {
   color: var(--white);
-  font-weight: 600;
+  font-weight: 700;
   text-align: right;
+  font-size: 15px;
 }
 
 /* ===== CLIMB BADGE ===== */
@@ -551,14 +553,14 @@ header {
 
 .pit-item-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
 .pit-item-val {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--white);
   line-height: 1.3;
@@ -586,7 +588,7 @@ header {
 
 .tba-box-label {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -615,10 +617,10 @@ header {
   display: grid;
   grid-template-columns: 44px 52px 80px 80px 80px 1fr 80px;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--border2);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -628,9 +630,9 @@ header {
   display: grid;
   grid-template-columns: 44px 52px 80px 80px 80px 1fr 80px;
   gap: 8px;
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--bg3);
-  font-size: 12px;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
   align-items: center;
   transition: background 0.1s;
 }
@@ -639,7 +641,7 @@ header {
 .mh-row:last-child { border-bottom: none; }
 
 .mh-num { font-family: 'Courier New', Courier, monospace; color: var(--text2); }
-.mh-agent { font-family: 'Courier New', Courier, monospace; font-size: 10px; color: var(--text3); }
+.mh-agent { font-family: 'Courier New', Courier, monospace; font-size: 12px; color: var(--text2); }
 
 .pos-R1,.pos-R2,.pos-R3 { color: #ff6070; font-family: 'Courier New', Courier, monospace; font-size: 11px; }
 .pos-B1,.pos-B2,.pos-B3 { color: var(--accent); font-family: 'Courier New', Courier, monospace; font-size: 11px; }
@@ -855,7 +857,7 @@ header {
 .rank-bar-fill.orange { background: linear-gradient(90deg, #994400, var(--orange)); }
 .rank-bar-fill.green { background: linear-gradient(90deg, #007744, var(--green)); }
 
-.rank-sub { font-family: 'Courier New', Courier, monospace; font-size: 9px; color: var(--text3); }
+.rank-sub { font-family: 'Courier New', Courier, monospace; font-size: 11px; color: var(--text2); }
 
 .rank-val { font-family: Impact, 'Arial Narrow', Arial, sans-serif; font-size: 30px; color: var(--accent); text-align: right; line-height: 1; }
 
@@ -919,7 +921,7 @@ header {
 .sel-bar-wrap { position: relative; }
 .sel-bar-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
 .sel-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent-d), var(--accent)); }
-.sel-bar-sub { font-family: 'Courier New', Courier, monospace; font-size: 9px; color: var(--text3); margin-top: 2px; }
+.sel-bar-sub { font-family: 'Courier New', Courier, monospace; font-size: 11px; color: var(--text2); margin-top: 2px; }
 
 .sel-val { font-family: Impact, 'Arial Narrow', Arial, sans-serif; font-size: 22px; color: var(--accent); text-align: center; }
 .sel-climb { text-align: center; }
@@ -963,10 +965,10 @@ header {
   display: grid;
   grid-template-columns: 44px 100px 1fr 80px 80px 70px 70px 60px 100px;
   gap: 10px;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-bottom: 1px solid var(--border2);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -994,6 +996,95 @@ header {
   .sel-item { grid-template-columns: 40px 80px 1fr 60px 50px 120px; }
   .sel-item > *:nth-child(6), .sel-item > *:nth-child(7) { display: none; }
 }
+
+/* Schedule our-team highlight */
+.sched-ours-red { border-color: var(--red) !important; background: rgba(255,34,68,0.06) !important; }
+.sched-ours-blue { border-color: var(--cyan) !important; background: rgba(0,170,255,0.06) !important; }
+
+/* Robot photo in profile */
+.robot-photo {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+}
+
+.robot-photo-placeholder {
+  width: 100%;
+  height: 140px;
+  border: 1px dashed var(--border2);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  background: var(--bg2);
+}
+
+/* Team name display */
+.team-name-display {
+  font-family: 'Trebuchet MS', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text2);
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 4px;
+  min-height: 22px;
+}
+
+/* Updated profile header: 3 columns */
+.profile-header-3col {
+  display: grid;
+  grid-template-columns: 1fr 160px 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+/* Blended indicator */
+.blend-badge {
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+/* h-status larger text */
+.h-status {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  padding: 5px 14px;
+  border-radius: 2px;
+}
+
+/* Reload all btn in header */
+.reload-all-btn {
+  padding: 5px 14px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-family: 'Trebuchet MS', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+.reload-all-btn:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 </head>
 <body>
@@ -1021,14 +1112,20 @@ header {
     </div>
     <div class="load-box">
       <div class="load-box-title">TBA Stats</div>
-      <label class="btn sm" style="border-color:var(--accent);color:var(--accent)" for="csvTba">Load CSV</label>
+      <label class="btn sm" style="border-color:var(--cyan);color:var(--cyan)" for="csvTba">Load CSV</label>
       <input type="file" id="csvTba" accept=".csv" style="display:none">
       <div class="load-box-status" id="tbaStatus">Not loaded (optional)</div>
     </div>
     <div class="load-box">
-      <div class="load-box-title">Demo Data</div>
+      <div class="load-box-title">Robot Photos</div>
+      <label class="btn sm" style="border-color:var(--orange);color:var(--orange)" for="photoUpload">Load Photos</label>
+      <input type="file" id="photoUpload" accept="image/*" multiple style="display:none">
+      <div class="load-box-status" id="photoStatus">Optional — name files 1723.jpg</div>
+    </div>
+    <div class="load-box" style="grid-column:1/-1;display:flex;align-items:center;gap:16px;justify-content:center">
+      <div class="load-box-title" style="margin:0">Demo Data</div>
       <button class="btn sm dim" onclick="loadDemo()">Load Demo</button>
-      <div class="load-box-status" id="demoStatus">Test without real data</div>
+      <div class="load-box-status" id="demoStatus" style="margin:0">Test without real data</div>
     </div>
   </div>
 
@@ -1051,8 +1148,10 @@ header {
     <div class="h-status match" id="hMatch">MATCH: —</div>
     <div class="h-status pit" id="hPit">PROFILES: —</div>
     <div class="h-status tba" id="hTba">TBA: —</div>
-    <label class="btn sm dim" for="csvReload">RELOAD</label>
+    <label class="reload-all-btn" for="csvMatch" title="Reload match data">&#8635; MATCH</label>
+    <label class="reload-all-btn" for="csvTbaReload" title="Reload TBA data" style="border-color:var(--border2)">&#8635; TBA</label>
     <input type="file" id="csvReload" accept=".csv" style="display:none">
+    <input type="file" id="csvTbaReload" accept=".csv" style="display:none">
   </div>
 </header>
 
@@ -1088,8 +1187,9 @@ header {
     <div class="tba-api-row">
       <input type="password" class="api-input" id="tbaApiKey" placeholder="Paste TBA API key...">
       <input type="text" class="api-input" style="max-width:180px" id="tbaEventCode" placeholder="Event code (e.g. 2026moirc)">
+      <input type="text" class="api-input" style="max-width:130px" id="myTeamNum" placeholder="Your team # (1723)">
       <button class="btn sm" onclick="pullSchedule()">PULL SCHEDULE</button>
-      <div style="font-family:'Courier New',Courier,monospace;font-size:10px;color:var(--text3)" id="schedStatus">No schedule loaded</div>
+      <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text2)" id="schedStatus">No schedule loaded</div>
     </div>
     <div class="sched-grid" id="schedGrid" style="display:none"></div>
   </div>
@@ -1170,12 +1270,87 @@ header {
 // DATA STORE
 // ============================================================
 var matchRows = [];
-var pitMap = {};      // team -> pit profile object
-var tbaMap = {};      // team -> tba stats object
-var teamMap = {};     // team -> aggregated match stats
-var scheduleData = [];// TBA schedule
-var selectionState = {}; // team -> {picked, pickedBy, dnp, ours}
-var OUR_TEAM = '1723'; // default — user can flag their team
+var pitMap = {};
+var tbaMap = {};
+var teamMap = {};
+var scheduleData = [];
+var selectionState = {};
+var teamNames = {};   // team -> name from TBA API
+var robotPhotos = {}; // team -> data URI of robot photo
+var OUR_TEAM = '1723';
+
+// ============================================================
+// LOCALSTORAGE PERSISTENCE
+// ============================================================
+var LS_MATCH = 'bau_match_csv';
+var LS_PIT   = 'bau_pit_csv';
+var LS_TBA   = 'bau_tba_csv';
+var LS_STATE = 'bau_sel_state';
+var LS_OUR   = 'bau_our_team';
+var LS_NAMES = 'bau_team_names';
+
+function saveToStorage(key, val) {
+  try { localStorage.setItem(key, val); } catch(e) { console.warn('Storage full:', e); }
+}
+
+function loadFromStorage(key) {
+  try { return localStorage.getItem(key); } catch(e) { return null; }
+}
+
+function restoreSession() {
+  // Restore match data
+  var mc = loadFromStorage(LS_MATCH);
+  if (mc) {
+    matchRows = parseCSVText(mc);
+    teamMap = aggregateMatch(matchRows);
+  }
+  // Restore pit data
+  var pc = loadFromStorage(LS_PIT);
+  if (pc) {
+    pitMap = parsePit(parseCSVText(pc));
+  }
+  // Restore TBA data
+  var tc = loadFromStorage(LS_TBA);
+  if (tc) {
+    tbaMap = parseTBA(parseCSVText(tc));
+  }
+  // Restore team names
+  var tn = loadFromStorage(LS_NAMES);
+  if (tn) { try { teamNames = JSON.parse(tn); } catch(e) {} }
+  // Restore selection state
+  var ss = loadFromStorage(LS_STATE);
+  if (ss) { try { selectionState = JSON.parse(ss); } catch(e) {} }
+  // Restore our team
+  var ot = loadFromStorage(LS_OUR);
+  if (ot) OUR_TEAM = ot;
+
+  // If we have match data, blend and proceed
+  if (Object.keys(teamMap).length > 0) {
+    applyTBABlend();
+    updateHeaderStatus();
+    populateDropdown();
+    buildCats();
+    renderTop10('blendedFuel');
+    renderSelection('blendedFuel');
+    document.getElementById('overlay').style.display = 'none';
+  }
+}
+
+function saveSelectionState() {
+  saveToStorage(LS_STATE, JSON.stringify(selectionState));
+}
+
+function updateHeaderStatus() {
+  var tn = Object.keys(teamMap).length;
+  var pn = Object.keys(pitMap).length;
+  var bn = Object.keys(tbaMap).length;
+  var hm = document.getElementById('hMatch');
+  var hp = document.getElementById('hPit');
+  var ht = document.getElementById('hTba');
+  if (hm) { hm.textContent = 'MATCH: ' + tn + ' TEAMS'; hm.className = 'h-status match' + (tn>0?' ok':''); }
+  if (hp) { hp.textContent = 'PROFILES: ' + pn; hp.className = 'h-status pit' + (pn>0?' ok':''); }
+  if (ht) { ht.textContent = 'TBA: ' + bn + ' TEAMS'; ht.className = 'h-status tba' + (bn>0?' ok':''); }
+}
 
 // ============================================================
 // COLUMN INDICES — QRScout
@@ -1206,13 +1381,21 @@ function toStr(v) {
   return String(v).trim();
 }
 
-function climbPts(v) {
+function climbPts(v, isAuto) {
+  // isAuto: true = auto period, false/undefined = teleop
   if (!v) return 0;
   v = toStr(v).toUpperCase();
-  if (v === 'L1') return 3;
-  if (v === 'L2') return 6;
-  if (v === 'L3') return 10;
-  return 0; // F = failed, No = no climb
+  if (isAuto) {
+    // Auto: only L1 is possible, worth 15 pts
+    if (v === 'L1') return 15;
+    return 0;
+  } else {
+    // Teleop/Endgame
+    if (v === 'L1') return 10;
+    if (v === 'L2') return 20;
+    if (v === 'L3') return 30;
+    return 0; // F = failed, No = no climb
+  }
 }
 
 function bestClimb(counts) {
@@ -1306,14 +1489,14 @@ function aggregateMatch(rows) {
     t.autoFuelTotal += af;
 
     var acv = toStr(r[MC.AUTO_CLIMB]) || 'No';
-    t.autoClimbPts += climbPts(acv);
+    t.autoClimbPts += climbPts(acv, true); // auto climb
     if (t.autoClimbCounts[acv] !== undefined) t.autoClimbCounts[acv]++;
 
     var tf = toNum(r[MC.TELE_FUEL]);
     t.teleFuelTotal += tf;
 
     var tcv = toStr(r[MC.TELE_CLIMB]) || 'No';
-    t.teleClimbPts += climbPts(tcv);
+    t.teleClimbPts += climbPts(tcv, false); // tele climb
     if (t.teleClimbCounts[tcv] !== undefined) t.teleClimbCounts[tcv]++;
 
     // multi-selects
@@ -1368,9 +1551,40 @@ function aggregateMatch(rows) {
     t.topFuelColl    = topMode(t.fuelCollModes);
     // reliability 0-5
     t.reliability    = Math.max(0, Math.min(5, Math.round(5 * (1 - t.pctDied/100) * Math.min(1, t.played/6))));
+    // TBA blending applied later in applyTBABlend() after both datasets loaded
+    t.blendedAutoFuel  = t.avgAutoFuel;
+    t.blendedTeleFuel  = t.avgTeleFuel;
+    t.blendedFuel      = t.avgFuel;
+    t.blendedScore     = t.avgScore;
   });
 
   return map;
+}
+
+// ============================================================
+// TBA BLEND — apply after both match and TBA data are loaded
+// Averages scouted fuel with TBA fuel counts per team
+// ============================================================
+function applyTBABlend() {
+  if (!Object.keys(tbaMap).length || !Object.keys(teamMap).length) return;
+
+  Object.keys(teamMap).forEach(function(team) {
+    var t = teamMap[team];
+    var tba = tbaMap[team];
+    if (!tba) {
+      // No TBA data — use raw scouted numbers
+      t.blendedAutoFuel = t.avgAutoFuel;
+      t.blendedTeleFuel = t.avgTeleFuel;
+    } else {
+      // TBA tele fuel includes endgame fuel in our tracking
+      var tbaTele = tba.teleFuel + tba.endgameFuel;
+      // Simple average: (scouted + TBA) / 2
+      t.blendedAutoFuel = (t.avgAutoFuel + tba.autoFuel) / 2;
+      t.blendedTeleFuel = (t.avgTeleFuel + tbaTele) / 2;
+    }
+    t.blendedFuel  = t.blendedAutoFuel + t.blendedTeleFuel;
+    t.blendedScore = t.blendedFuel + t.avgAutoClimb + t.avgTeleClimb;
+  });
 }
 
 function topMode(obj) {
@@ -1433,22 +1647,22 @@ function parsePit(rows) {
 // TBA DATA PARSER
 // ============================================================
 function parseTBA(rows) {
+  // Supports both formats:
+  // Short: Team, OPR, Hub Auto Fuel, Hub Teleop Fuel, Hub Endgame Fuel, Total Tower Points
+  // Long:  Team, OPR, Hub Auto Fuel, Hub Teleop Fuel, Hub Endgame Fuel, Hub Total Fuel, Auto Tower, End Game Tower, Total Tower, Minor Fouls, Major Fouls
   var map = {};
   rows.forEach(function(r) {
     var team = toStr(r[0]);
     if (!team || team === 'Team' || isNaN(parseFloat(team))) return;
     team = String(parseInt(team));
+    var isLong = r.length > 6;
     map[team] = {
-      opr: toNum(r[1]),
-      autoFuel: toNum(r[2]),
-      teleFuel: toNum(r[3]),
-      endgameFuel: toNum(r[4]),
-      totalFuel: toNum(r[5]),
-      autoTower: toNum(r[6]),
-      endgameTower: toNum(r[7]),
-      totalTower: toNum(r[8]),
-      minorFouls: toNum(r[9]),
-      majorFouls: toNum(r[10])
+      opr:          toNum(r[1]),
+      autoFuel:     toNum(r[2]),
+      teleFuel:     toNum(r[3]),
+      endgameFuel:  toNum(r[4]),
+      totalFuel:    isLong ? toNum(r[5]) : toNum(r[2]) + toNum(r[3]) + toNum(r[4]),
+      totalTower:   isLong ? toNum(r[8]) : toNum(r[5]),
     };
   });
   return map;
@@ -1465,51 +1679,105 @@ function setupFileInput(inputId, handler) {
 }
 
 setupFileInput('csvMatch', function(text) {
+  saveToStorage(LS_MATCH, text);
   matchRows = parseCSVText(text);
   teamMap = aggregateMatch(matchRows);
+  applyTBABlend();
   var n = Object.keys(teamMap).length;
-  document.getElementById('matchStatus').textContent = n + ' teams loaded';
-  document.getElementById('matchStatus').className = 'load-box-status ok';
-  document.getElementById('hMatch').textContent = 'MATCH: ' + n + ' TEAMS';
-  document.getElementById('hMatch').className = 'h-status match ok';
+  var ms = document.getElementById('matchStatus');
+  if (ms) { ms.textContent = n + ' teams loaded'; ms.className = 'load-box-status ok'; }
+  updateHeaderStatus();
   populateDropdown();
   checkProceed();
   buildCats();
-  renderTop10('avgFuel');
-  renderSelection('avgFuel');
+  renderTop10('blendedFuel');
+  renderSelection('blendedFuel');
+  // Refresh current profile if one is shown
+  var v = document.getElementById('teamInput');
+  if (v && v.value) onSearch(v.value);
 });
 
 setupFileInput('csvPit', function(text) {
-  var rows = parseCSVText(text);
-  pitMap = parsePit(rows);
+  saveToStorage(LS_PIT, text);
+  pitMap = parsePit(parseCSVText(text));
   var n = Object.keys(pitMap).length;
-  document.getElementById('pitStatus').textContent = n + ' profiles loaded';
-  document.getElementById('pitStatus').className = 'load-box-status ok';
-  document.getElementById('hPit').textContent = 'PROFILES: ' + n;
-  document.getElementById('hPit').className = 'h-status pit ok';
+  var ps = document.getElementById('pitStatus');
+  if (ps) { ps.textContent = n + ' profiles loaded'; ps.className = 'load-box-status ok'; }
+  updateHeaderStatus();
+  var v = document.getElementById('teamInput');
+  if (v && v.value) onSearch(v.value);
 });
 
 setupFileInput('csvTba', function(text) {
-  var rows = parseCSVText(text);
-  tbaMap = parseTBA(rows);
+  saveToStorage(LS_TBA, text);
+  tbaMap = parseTBA(parseCSVText(text));
+  applyTBABlend();
   var n = Object.keys(tbaMap).length;
-  document.getElementById('tbaStatus').textContent = n + ' teams loaded';
-  document.getElementById('tbaStatus').className = 'load-box-status ok';
-  document.getElementById('hTba').textContent = 'TBA: ' + n + ' TEAMS';
-  document.getElementById('hTba').className = 'h-status tba ok';
+  var ts = document.getElementById('tbaStatus');
+  if (ts) { ts.textContent = n + ' teams loaded'; ts.className = 'load-box-status ok'; }
+  updateHeaderStatus();
+  if (Object.keys(teamMap).length) {
+    renderTop10('blendedFuel');
+    renderSelection('blendedFuel');
+    var v = document.getElementById('teamInput');
+    if (v && v.value) onSearch(v.value);
+  }
 });
 
 setupFileInput('csvReload', function(text) {
+  saveToStorage(LS_MATCH, text);
   matchRows = parseCSVText(text);
   teamMap = aggregateMatch(matchRows);
-  var n = Object.keys(teamMap).length;
-  document.getElementById('hMatch').textContent = 'MATCH: ' + n + ' TEAMS';
-  document.getElementById('hMatch').className = 'h-status match ok';
+  applyTBABlend();
+  updateHeaderStatus();
   populateDropdown();
   buildCats();
-  renderTop10('avgFuel');
-  renderSelection('avgFuel');
+  renderTop10('blendedFuel');
+  renderSelection('blendedFuel');
+  var v = document.getElementById('teamInput');
+  if (v && v.value) onSearch(v.value);
 });
+
+// Wire TBA reload button same as TBA load
+setupFileInput('csvTbaReload', function(text) {
+  saveToStorage(LS_TBA, text);
+  tbaMap = parseTBA(parseCSVText(text));
+  applyTBABlend();
+  var n = Object.keys(tbaMap).length;
+  updateHeaderStatus();
+  if (Object.keys(teamMap).length) {
+    renderTop10('blendedFuel');
+    renderSelection('blendedFuel');
+    var v = document.getElementById('teamInput');
+    if (v && v.value) onSearch(v.value);
+  }
+});
+
+// Robot photo upload — match by filename e.g. 1723.jpg
+function setupPhotoUpload() {
+  var inp = document.getElementById('photoUpload');
+  if (!inp) return;
+  inp.addEventListener('change', function(e) {
+    var files = Array.from(e.target.files);
+    var loaded = 0;
+    files.forEach(function(file) {
+      var team = file.name.replace(/\.[^.]+$/, '').trim();
+      if (!team || isNaN(parseInt(team))) return;
+      team = String(parseInt(team));
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        robotPhotos[team] = ev.target.result;
+        loaded++;
+        var el = document.getElementById('photoStatus');
+        if (el) el.textContent = loaded + ' photos loaded';
+        // refresh profile if this team is shown
+        var v = document.getElementById('teamInput');
+        if (v && v.value.trim() === team) onSearch(team);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
 
 function checkProceed() {
   var btn = document.getElementById('proceedBtn');
@@ -1835,9 +2103,18 @@ function renderProfile(t) {
     '</div>';
   }
 
+  var teamName = teamNames[t.team] || '';
+  var photoHTML = robotPhotos[t.team]
+    ? '<img class="robot-photo" src="'+robotPhotos[t.team]+'" alt="Robot '+t.team+'">'
+    : '<div class="robot-photo-placeholder">NO PHOTO<br>NAME FILE '+t.team+'.JPG</div>';
+
   document.getElementById('profileResult').innerHTML =
     '<div class="panel" style="margin-bottom:16px;">' +
-      '<div class="profile-header">' +
+      '<div class="profile-header-3col">' +
+        '<div>' +
+          photoHTML +
+          (teamName ? '<div class="team-name-display">'+teamName+'</div>' : '') +
+        '</div>' +
         '<div class="team-id-block">' +
           '<div class="team-number">'+t.team+'</div>' +
           '<div class="reliability-label">RELIABILITY</div>' +
@@ -1845,18 +2122,18 @@ function renderProfile(t) {
           '<div class="tag-row">'+tags.join('')+'</div>' +
         '</div>' +
         '<div class="stat-grid">' +
-          statBox('AVG SCORE', t.avgScore.toFixed(1), 'c-accent', 'pts per match') +
-          statBox('AVG FUEL', t.avgFuel.toFixed(1), 'c-orange', 'auto + tele') +
-          statBox('AUTO FUEL', t.avgAutoFuel.toFixed(1), 'c-orange', 'per match') +
-          statBox('TELE FUEL', t.avgTeleFuel.toFixed(1), 'c-green', 'per match') +
+          statBox('AVG SCORE', (t.blendedScore||t.avgScore).toFixed(1), 'c-accent', 'blended pts/match') +
+          statBox('AVG FUEL', (t.blendedFuel||t.avgFuel).toFixed(1), 'c-orange', 'blended auto+tele') +
+          statBox('AUTO FUEL', (t.blendedAutoFuel||t.avgAutoFuel).toFixed(1), 'c-orange', 'blended/match') +
+          statBox('TELE FUEL', (t.blendedTeleFuel||t.avgTeleFuel).toFixed(1), 'c-green', 'blended/match') +
           statBox('BEST CLIMB', '', '', '') +
           statBoxRaw('BEST CLIMB', climbBadge(t.bestClimb), 'tele endgame') +
           statBox('AVG CLIMB', t.avgTeleClimb.toFixed(1), 'c-accent', 'climb pts/match') +
           statBox('ACCURACY', t.avgAccuracy.toFixed(1)+'/4', t.avgAccuracy>=3?'c-green':t.avgAccuracy>=2?'c-yellow':'c-red', 'scouter rating') +
           statBox('DIED %', t.pctDied.toFixed(0)+'%', t.pctDied<10?'c-green':t.pctDied<25?'c-yellow':'c-red', 'of matches') +
-        '</div>' +
-      '</div>' +
-    '</div>' +
+        '</div>' +  // close stat-grid
+      '</div>' +    // close profile-header-3col
+    '</div>' +      // close panel
 
     '<div class="two-col" style="margin-bottom:16px;">' +
       '<div class="panel p-orange">' +
@@ -1958,8 +2235,8 @@ function calcAlliance() {
   var red = getAlliance('r'), blue = getAlliance('b');
   if (!red.length && !blue.length) { alert('Enter teams for at least one alliance.'); return; }
 
-  var rs = red.reduce(function(s,t){ return s+t.avgScore; },0);
-  var bs = blue.reduce(function(s,t){ return s+t.avgScore; },0);
+  var rs = red.reduce(function(s,t){ return s+(t.blendedScore||t.avgScore); },0);
+  var bs = blue.reduce(function(s,t){ return s+(t.blendedScore||t.avgScore); },0);
 
   document.getElementById('redScore').textContent = rs.toFixed(1);
   document.getElementById('blueScore').textContent = bs.toFixed(1);
@@ -1997,43 +2274,95 @@ function buildBD(id, teams) {
 function pullSchedule() {
   var key = document.getElementById('tbaApiKey').value.trim();
   var event = document.getElementById('tbaEventCode').value.trim();
-  if (!key || !event) { alert('Enter both API key and event code.'); return; }
+  var myTeam = document.getElementById('myTeamNum').value.trim();
+  if (!key || !event) { alert('Enter API key and event code.'); return; }
 
-  document.getElementById('schedStatus').textContent = 'Fetching...';
+  var schedEl = document.getElementById('schedStatus');
+  schedEl.textContent = 'Fetching schedule...';
 
-  fetch('https://www.thebluealliance.com/api/v3/event/'+event+'/matches/simple', {
-    headers: { 'X-TBA-Auth-Key': key }
+  // Fetch matches and team list in parallel
+  var matchUrl = 'https://www.thebluealliance.com/api/v3/event/'+event+'/matches/simple';
+  var teamsUrl = 'https://www.thebluealliance.com/api/v3/event/'+event+'/teams/simple';
+  var hdrs = { 'X-TBA-Auth-Key': key };
+
+  Promise.all([
+    fetch(matchUrl, {headers:hdrs}).then(function(r){ return r.json(); }),
+    fetch(teamsUrl, {headers:hdrs}).then(function(r){ return r.json(); })
+  ])
+  .then(function(results) {
+    var matches = results[0];
+    var teams = results[1];
+
+    // Build team names map
+    if (Array.isArray(teams)) {
+      teams.forEach(function(t) {
+        var num = String(t.team_number);
+        teamNames[num] = t.nickname || t.name || '';
+      });
+      saveToStorage(LS_NAMES, JSON.stringify(teamNames));
+    }
+
+    if (!Array.isArray(matches)) {
+      schedEl.textContent = 'Error loading schedule';
+      return;
+    }
+
+    var allQuals = matches.filter(function(m){ return m.comp_level === 'qm'; })
+                          .sort(function(a,b){ return a.match_number - b.match_number; });
+
+    // Filter to our team if provided
+    if (myTeam) {
+      var frcKey = 'frc' + myTeam;
+      scheduleData = allQuals.filter(function(m) {
+        return m.alliances.red.team_keys.indexOf(frcKey) >= 0 ||
+               m.alliances.blue.team_keys.indexOf(frcKey) >= 0;
+      });
+      schedEl.textContent = scheduleData.length + ' matches for Team ' + myTeam;
+    } else {
+      scheduleData = allQuals;
+      schedEl.textContent = allQuals.length + ' qual matches loaded';
+    }
+
+    renderSchedule(myTeam);
+    // Also refresh any open profile to show team name
+    var v = document.getElementById('teamInput');
+    if (v && v.value) onSearch(v.value);
   })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (!Array.isArray(data)) { document.getElementById('schedStatus').textContent = 'Error: '+JSON.stringify(data).substring(0,60); return; }
-    scheduleData = data.filter(function(m){ return m.comp_level === 'qm'; })
-                       .sort(function(a,b){ return a.match_number - b.match_number; });
-    renderSchedule();
-    document.getElementById('schedStatus').textContent = scheduleData.length + ' qual matches loaded';
-  })
-  .catch(function(e) { document.getElementById('schedStatus').textContent = 'Error: '+e.message; });
+  .catch(function(e) { schedEl.textContent = 'Error: ' + e.message; });
 }
 
-function renderSchedule() {
+function renderSchedule(myTeam) {
   var grid = document.getElementById('schedGrid');
   grid.style.display = 'grid';
   grid.innerHTML = scheduleData.map(function(m) {
     var red = m.alliances.red.team_keys.map(function(k){ return k.replace('frc',''); });
     var blue = m.alliances.blue.team_keys.map(function(k){ return k.replace('frc',''); });
-    return '<div class="sched-card" onclick="loadMatch('+JSON.stringify(red)+','+JSON.stringify(blue)+',this)">' +
-      '<div class="sched-match-num">QUAL '+m.match_number+'</div>' +
+    var isRed = myTeam && red.indexOf(myTeam) >= 0;
+    var isBlue = myTeam && blue.indexOf(myTeam) >= 0;
+    var ourSide = isRed ? 'red' : isBlue ? 'blue' : '';
+
+    function teamLabel(num) {
+      var name = teamNames[num] ? ' <span style="font-size:9px;opacity:0.7">'+teamNames[num]+'</span>' : '';
+      var bold = (num === myTeam) ? 'font-weight:bold;text-decoration:underline' : '';
+      return '<span style="'+bold+'">'+num+'</span>'+name;
+    }
+
+    return '<div class="sched-card'+(ourSide?' sched-ours-'+ourSide:'')+'" onclick="loadMatch('+JSON.stringify(red)+','+JSON.stringify(blue)+',''+ourSide+'',this)">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<div class="sched-match-num">Q'+m.match_number+'</div>' +
+        (ourSide ? '<div style="font-family:'Courier New',monospace;font-size:9px;color:'+(ourSide==='red'?'var(--red)':'var(--cyan)')+';letter-spacing:1px">'+ourSide.toUpperCase()+'</div>' : '') +
+      '</div>' +
       '<div class="sched-teams">' +
-        '<span class="sched-red">R: '+red.join(' / ')+'</span><br>' +
-        '<span class="sched-blue">B: '+blue.join(' / ')+'</span>' +
+        '<span class="sched-red">'+red.map(teamLabel).join(' / ')+'</span><br>' +
+        '<span class="sched-blue">'+blue.map(teamLabel).join(' / ')+'</span>' +
       '</div>' +
     '</div>';
   }).join('');
 }
 
-function loadMatch(red, blue, el) {
+function loadMatch(red, blue, ourSide, el) {
   document.querySelectorAll('.sched-card').forEach(function(c){ c.classList.remove('active-match'); });
-  el.classList.add('active-match');
+  if (el && el.classList) el.classList.add('active-match');
   ['r1','r2','r3'].forEach(function(id, i) {
     document.getElementById(id).value = red[i] || '';
     apLabel('r', i+1, red[i] || '');
@@ -2043,21 +2372,25 @@ function loadMatch(red, blue, el) {
     apLabel('b', i+1, blue[i] || '');
   });
   calcAlliance();
+  // Scroll to prediction
+  var pred = document.getElementById('predArea');
+  if (pred) pred.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 // ============================================================
 // RANKINGS (TOP 10)
 // ============================================================
 var CATS = [
-  { key:'avgFuel',    label:'Avg Fuel',    fn:function(t){ return t.avgFuel; },         color:'orange' },
-  { key:'avgScore',   label:'Avg Score',   fn:function(t){ return t.avgScore; },         color:'blue'   },
-  { key:'avgAuto',    label:'Auto Fuel',   fn:function(t){ return t.avgAutoFuel; },      color:'orange' },
-  { key:'avgTele',    label:'Tele Fuel',   fn:function(t){ return t.avgTeleFuel; },      color:'green'  },
-  { key:'avgClimb',   label:'Climb Pts',   fn:function(t){ return t.avgTeleClimb; },     color:'blue'   },
-  { key:'accuracy',   label:'Accuracy',    fn:function(t){ return t.avgAccuracy; },      color:'green'  },
-  { key:'defense',    label:'Defense',     fn:function(t){ return t.avgDefSkill; },      color:'orange' },
-  { key:'reliability',label:'Reliability', fn:function(t){ return 100-t.pctDied; },      color:'green'  },
-  { key:'cleanest',   label:'Fewest Cards',fn:function(t){ return -t.cards; },           color:'green',  fmt:function(v,t){ return t.cards+' cards'; } },
+  { key:'blendedFuel', label:'Fuel (Blended)', fn:function(t){ return t.blendedFuel; },     color:'orange' },
+  { key:'blendedScore',label:'Score (Blended)',fn:function(t){ return t.blendedScore; },     color:'blue'   },
+  { key:'avgFuel',     label:'Fuel (Scouted)', fn:function(t){ return t.avgFuel; },          color:'orange' },
+  { key:'avgAuto',     label:'Auto Fuel',      fn:function(t){ return t.blendedAutoFuel; },  color:'orange' },
+  { key:'avgTele',     label:'Tele Fuel',      fn:function(t){ return t.blendedTeleFuel; },  color:'green'  },
+  { key:'avgClimb',    label:'Climb Pts',      fn:function(t){ return t.avgTeleClimb; },     color:'blue'   },
+  { key:'accuracy',    label:'Accuracy',       fn:function(t){ return t.avgAccuracy; },      color:'green'  },
+  { key:'defense',     label:'Defense',        fn:function(t){ return t.avgDefSkill; },      color:'orange' },
+  { key:'reliability', label:'Reliability',    fn:function(t){ return 100-t.pctDied; },      color:'green'  },
+  { key:'cleanest',    label:'Fewest Cards',   fn:function(t){ return -t.cards; },           color:'green',  fmt:function(v,t){ return t.cards+' cards'; } },
 ];
 
 var activeCat = 'avgFuel';
@@ -2176,7 +2509,7 @@ function renderSelection(sortKey) {
         '<div class="sel-bar-track"><div class="sel-bar-fill" style="width:'+Math.min(100,t.avgFuel/maxFuel*100).toFixed(0)+'%"></div></div>' +
         '<div class="sel-bar-sub">avg fuel per match</div>' +
       '</div>' +
-      '<div class="sel-val">'+t.avgFuel.toFixed(1)+'</div>' +
+      '<div class="sel-val">'+(t.blendedFuel||t.avgFuel).toFixed(1)+'</div>' +
       '<div class="sel-climb">'+climbBadge(t.bestClimb)+'</div>' +
       '<div class="sel-rel"><div class="sel-rel-dots">'+relDots+'</div></div>' +
       '<div style="font-family:\'Courier New\',Courier,monospace;font-size:11px;color:'+(t.cards>0?'var(--red)':'var(--text3)')+'">'+t.cards+'</div>' +
@@ -2190,42 +2523,57 @@ function markPicked(team) {
   var ally = prompt('Which alliance picked them? (e.g. Alliance 1, Alliance 2)');
   if (ally === null) return;
   selectionState[team] = { picked: true, pickedBy: ally || '?' };
+  saveSelectionState();
   renderSelection(selSortKey);
 }
 
 function markDNP(team) {
-  selectionState[team] = { dnp: true };
+  // toggle DNP off if already set
+  if (selectionState[team] && selectionState[team].dnp) {
+    delete selectionState[team];
+  } else {
+    selectionState[team] = { dnp: true };
+  }
+  saveSelectionState();
   renderSelection(selSortKey);
 }
 
 function markOurs(team) {
-  // clear any previous ours
   Object.keys(selectionState).forEach(function(k) {
     if (selectionState[k].ours) delete selectionState[k];
   });
   selectionState[team] = { ours: true };
   OUR_TEAM = team;
+  saveToStorage(LS_OUR, team);
+  saveSelectionState();
+  renderSelection(selSortKey);
+}
+
+function clearPick(team) {
+  delete selectionState[team];
+  saveSelectionState();
   renderSelection(selSortKey);
 }
 
 function resetSelection() {
   selectionState = {};
+  saveSelectionState();
   renderSelection(selSortKey);
 }
-</script>
 
+// ============================================================
+// STARTUP
+// ============================================================
+window.addEventListener('load', function() {
+  setupPhotoUpload();
+  restoreSession();
+});
+</script>
 <script>
-// Register Service Worker for offline PWA support
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/fbi-1723-bau/sw.js')
-      .then(function(reg) {
-        console.log('BAU: Service worker registered', reg.scope);
-      })
-      .catch(function(err) {
-        console.log('BAU: Service worker registration failed', err);
-      });
-  });
+  navigator.serviceWorker.register('/fbi-1723-bau/sw.js')
+    .then(function(reg) { console.log('BAU: SW registered', reg.scope); })
+    .catch(function(err) { console.log('BAU: SW failed', err); });
 }
 </script>
 </body>
