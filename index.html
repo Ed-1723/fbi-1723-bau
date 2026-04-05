@@ -1148,10 +1148,13 @@ header {
     <div class="h-status match" id="hMatch">MATCH: —</div>
     <div class="h-status pit" id="hPit">PROFILES: —</div>
     <div class="h-status tba" id="hTba">TBA: —</div>
-    <label class="reload-all-btn" for="csvMatch" title="Reload match data">&#8635; MATCH</label>
-    <label class="reload-all-btn" for="csvTbaReload" title="Reload TBA data" style="border-color:var(--border2)">&#8635; TBA</label>
-    <input type="file" id="csvReload" accept=".csv" style="display:none">
+    <label class="reload-all-btn" for="csvMatchReload" title="Reload match data">&#8635; MATCH</label>
+    <label class="reload-all-btn" for="csvTbaReload" title="Reload TBA data">&#8635; TBA</label>
+    <label class="reload-all-btn" for="photosReload" title="Load robot photos" style="border-color:var(--orange);color:var(--orange)">&#8635; PHOTOS</label>
+    <button class="reload-all-btn" onclick="clearAllData()" title="Clear all saved data and reload" style="border-color:var(--red);color:var(--red)">&#10005; CLEAR</button>
+    <input type="file" id="csvMatchReload" accept=".csv" style="display:none">
     <input type="file" id="csvTbaReload" accept=".csv" style="display:none">
+    <input type="file" id="photosReload" accept="image/*" multiple style="display:none">
   </div>
 </header>
 
@@ -1297,7 +1300,25 @@ function loadFromStorage(key) {
   try { return localStorage.getItem(key); } catch(e) { return null; }
 }
 
+var DATA_VERSION = 'v3'; // bump this to force clear stale localStorage
+var LS_VERSION = 'bau_data_version';
+
 function restoreSession() {
+  // Version check — clear stale data from old app versions
+  var storedVer = loadFromStorage(LS_VERSION);
+  if (storedVer !== DATA_VERSION) {
+    console.log('BAU: Data version mismatch, clearing stale localStorage');
+    try {
+      localStorage.removeItem(LS_MATCH);
+      localStorage.removeItem(LS_PIT);
+      localStorage.removeItem(LS_TBA);
+      localStorage.removeItem(LS_STATE);
+      localStorage.removeItem(LS_NAMES);
+    } catch(e) {}
+    saveToStorage(LS_VERSION, DATA_VERSION);
+    return; // show overlay for fresh load
+  }
+
   // Restore match data
   var mc = loadFromStorage(LS_MATCH);
   if (mc) {
@@ -1738,6 +1759,49 @@ setupFileInput('csvReload', function(text) {
   if (v && v.value) onSearch(v.value);
 });
 
+// Wire match reload button
+setupFileInput('csvMatchReload', function(text) {
+  saveToStorage(LS_MATCH, text);
+  matchRows = parseCSVText(text);
+  teamMap = aggregateMatch(matchRows);
+  applyTBABlend();
+  updateHeaderStatus();
+  populateDropdown();
+  buildCats();
+  renderTop10('blendedFuel');
+  renderSelection('blendedFuel');
+  var v = document.getElementById('teamInput');
+  if (v && v.value) onSearch(v.value);
+});
+
+// Wire photos reload button (header)
+setupFileInput('photosReload', function() {}); // handled separately via change event
+document.addEventListener('DOMContentLoaded', function() {
+  var photosInput = document.getElementById('photosReload');
+  if (photosInput) {
+    photosInput.addEventListener('change', function(e) {
+      handlePhotoFiles(e.target.files);
+    });
+  }
+});
+
+// Clear all data from localStorage
+function clearAllData() {
+  if (!confirm('Clear all saved data? You will need to reload your CSV files.')) return;
+  try {
+    localStorage.removeItem(LS_MATCH);
+    localStorage.removeItem(LS_PIT);
+    localStorage.removeItem(LS_TBA);
+    localStorage.removeItem(LS_STATE);
+    localStorage.removeItem(LS_OUR);
+    localStorage.removeItem(LS_NAMES);
+  } catch(e) {}
+  matchRows = []; pitMap = {}; tbaMap = {}; teamMap = {};
+  scheduleData = []; selectionState = {}; teamNames = {}; robotPhotos = {};
+  updateHeaderStatus();
+  document.getElementById('overlay').style.display = 'flex';
+}
+
 // Wire TBA reload button same as TBA load
 setupFileInput('csvTbaReload', function(text) {
   saveToStorage(LS_TBA, text);
@@ -1753,30 +1817,38 @@ setupFileInput('csvTbaReload', function(text) {
   }
 });
 
+// Shared photo file handler
+function handlePhotoFiles(fileList) {
+  var files = Array.from(fileList);
+  var loaded = 0;
+  files.forEach(function(file) {
+    var team = file.name.replace(/\.[^.]+$/, '').trim();
+    if (!team || isNaN(parseInt(team))) return;
+    team = String(parseInt(team));
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      robotPhotos[team] = ev.target.result;
+      loaded++;
+      ['photoStatus','photoStatus2'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = loaded + ' photo' + (loaded>1?'s':'') + ' loaded';
+      });
+      var v = document.getElementById('teamInput');
+      if (v && v.value.trim() === team) onSearch(team);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 // Robot photo upload — match by filename e.g. 1723.jpg
 function setupPhotoUpload() {
+  // Wire overlay photo input
   var inp = document.getElementById('photoUpload');
-  if (!inp) return;
-  inp.addEventListener('change', function(e) {
-    var files = Array.from(e.target.files);
-    var loaded = 0;
-    files.forEach(function(file) {
-      var team = file.name.replace(/\.[^.]+$/, '').trim();
-      if (!team || isNaN(parseInt(team))) return;
-      team = String(parseInt(team));
-      var reader = new FileReader();
-      reader.onload = function(ev) {
-        robotPhotos[team] = ev.target.result;
-        loaded++;
-        var el = document.getElementById('photoStatus');
-        if (el) el.textContent = loaded + ' photos loaded';
-        // refresh profile if this team is shown
-        var v = document.getElementById('teamInput');
-        if (v && v.value.trim() === team) onSearch(team);
-      };
-      reader.readAsDataURL(file);
+  if (inp) {
+    inp.addEventListener('change', function(e) {
+      handlePhotoFiles(e.target.files);
     });
-  });
+  }
 }
 
 function checkProceed() {
@@ -1784,6 +1856,7 @@ function checkProceed() {
   if (Object.keys(teamMap).length > 0) {
     btn.disabled = false;
     btn.style.opacity = '1';
+    saveToStorage(LS_VERSION, DATA_VERSION);
   }
 }
 

@@ -1,7 +1,7 @@
-// BAU Field Analysis System — Service Worker
+// BAU Field Analysis System — Service Worker v3
 // FBI First Bots of Independence 1723
 
-const CACHE_NAME = 'bau-field-v2';
+const CACHE_NAME = 'bau-field-v3';
 const BASE = '/fbi-1723-bau';
 const ASSETS = [
   BASE + '/',
@@ -11,18 +11,16 @@ const ASSETS = [
   BASE + '/icon-512.png',
 ];
 
-// Install — cache all assets
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      console.log('BAU: Caching assets for offline use');
+      console.log('BAU: Caching v3 assets');
       return cache.addAll(ASSETS);
     })
   );
   self.skipWaiting();
 });
 
-// Activate — clean up old caches
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(keys) {
@@ -35,18 +33,13 @@ self.addEventListener('activate', function(event) {
   self.clients.claim();
 });
 
-// Fetch — serve from cache, fall back to network
 self.addEventListener('fetch', function(event) {
-  // Always go to network for TBA API calls
   if (event.request.url.includes('thebluealliance.com')) {
     return;
   }
-
   event.respondWith(
     caches.match(event.request).then(function(cached) {
-      if (cached) {
-        return cached;
-      }
+      if (cached) return cached;
       return fetch(event.request).then(function(response) {
         if (response && response.status === 200) {
           var copy = response.clone();
