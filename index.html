@@ -1061,6 +1061,16 @@ header {
   margin-left: 6px;
 }
 
+/* Clickable team numbers */
+.clickable-team {
+  cursor: pointer;
+  transition: color 0.15s, text-shadow 0.15s;
+}
+.clickable-team:hover {
+  color: var(--accent) !important;
+  text-shadow: 0 0 12px rgba(112,190,70,0.6);
+}
+
 /* h-status larger text */
 .h-status {
   font-family: 'Courier New', Courier, monospace;
@@ -1972,6 +1982,25 @@ function showTab(name, btn) {
 // ============================================================
 function findTeam(v) { return teamMap[String(v).trim()] || null; }
 
+// Navigate to Subject Profile for a team — callable from any tab
+function goToProfile(teamNum) {
+  var tabBtn = document.querySelector('.tab-btn');
+  // Find and click the Subject Profile tab button
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    if (b.textContent.trim() === 'SUBJECT PROFILE') {
+      showTab('search', b);
+    }
+  });
+  // Set the team input and trigger search
+  var input = document.getElementById('teamInput');
+  var sel = document.getElementById('teamSel');
+  if (input) input.value = String(teamNum);
+  if (sel) sel.value = String(teamNum);
+  onSearch(String(teamNum));
+  // Scroll to top of profile
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
 function climbBadge(v) {
   if (!v || v === 'No') return '<span class="climb climb-no">No Climb</span>';
   if (v === 'F')  return '<span class="climb climb-f">Failed</span>';
@@ -2511,7 +2540,7 @@ function renderTop10(catKey) {
     var valColor = cat.color==='orange'?'var(--orange)':cat.color==='green'?'var(--green)':'var(--accent)';
     return '<div class="rank-item" style="animation-delay:'+(i*0.04)+'s">' +
       '<div class="rank-pos '+(medals[i]||'')+'">'+(i+1)+'</div>' +
-      '<div class="rank-team">'+t.team+'</div>' +
+      '<div class="rank-team clickable-team" onclick="goToProfile('+t.team+')" title="View profile">'+t.team+'</div>' +
       '<div>' +
         '<div class="rank-bar-track"><div class="rank-bar-fill '+cat.color+'" style="width:'+pct+'%"></div></div>' +
         '<div class="rank-sub">'+t.played+' matches played</div>' +
@@ -2592,7 +2621,7 @@ function renderSelection(sortKey) {
 
     return '<div class="'+itemCls+'" style="animation-delay:'+(i*0.02)+'s">' +
       '<div class="sel-rank '+rankCls+'">'+(i+1)+'</div>' +
-      '<div class="sel-team">'+t.team+'</div>' +
+      '<div class="sel-team clickable-team" onclick="goToProfile('+t.team+')" title="View profile">'+t.team+'</div>' +
       '<div class="sel-bar-wrap">' +
         '<div class="sel-bar-track"><div class="sel-bar-fill" style="width:'+Math.min(100,t.avgFuel/maxFuel*100).toFixed(0)+'%"></div></div>' +
         '<div class="sel-bar-sub">avg fuel per match</div>' +
