@@ -993,8 +993,20 @@ header {
 @media (max-width: 900px) {
   .alliance-grid, .two-col, .bd-grid { grid-template-columns: 1fr; }
   .profile-header { grid-template-columns: 1fr; }
+  .profile-header-3col { grid-template-columns: 1fr 1fr; }
+  .profile-header-3col > *:last-child { grid-column: 1 / -1; }
   .sel-item { grid-template-columns: 40px 80px 1fr 60px 50px 120px; }
   .sel-item > *:nth-child(6), .sel-item > *:nth-child(7) { display: none; }
+  .team-number { font-size: 64px; }
+  .stat-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .profile-header-3col { grid-template-columns: 1fr; }
+  .team-number { font-size: 52px; }
+  .mh-header, .mh-row { grid-template-columns: 36px 46px 70px 1fr; }
+  .mh-row > *:nth-child(5), .mh-row > *:nth-child(6), .mh-row > *:nth-child(7) { display: none; }
+  .stat-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
 }
 
 /* Schedule our-team highlight */
@@ -1013,17 +1025,21 @@ header {
 
 .robot-photo-placeholder {
   width: 100%;
-  height: 140px;
+  height: 120px;
   border: 1px dashed var(--border2);
   border-radius: 3px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   font-family: 'Courier New', Courier, monospace;
   font-size: 11px;
   color: var(--text3);
   letter-spacing: 1px;
   background: var(--bg2);
+  text-align: center;
+  padding: 8px;
 }
 
 /* Team name display */
@@ -1041,8 +1057,8 @@ header {
 /* Updated profile header: 3 columns */
 .profile-header-3col {
   display: grid;
-  grid-template-columns: 1fr 160px 1fr;
-  gap: 20px;
+  grid-template-columns: 180px 160px 1fr;
+  gap: 16px;
   align-items: start;
   margin-bottom: 20px;
 }
@@ -1129,7 +1145,7 @@ header {
     <div class="load-box">
       <div class="load-box-title">Robot Photos</div>
       <label class="btn sm" style="border-color:var(--orange);color:var(--orange)" for="photoUpload">Load Photos</label>
-      <input type="file" id="photoUpload" accept="image/*" multiple style="display:none">
+      <input type="file" id="photoUpload" accept="image/*,.jpg,.jpeg,.png,.gif,.webp" multiple style="display:none">
       <div class="load-box-status" id="photoStatus">Optional — name files 1723.jpg</div>
     </div>
     <div class="load-box" style="grid-column:1/-1;display:flex;align-items:center;gap:16px;justify-content:center">
@@ -1164,7 +1180,7 @@ header {
     <button class="reload-all-btn" onclick="clearAllData()" title="Clear all saved data and reload" style="border-color:var(--red);color:var(--red)">&#10005; CLEAR</button>
     <input type="file" id="csvMatchReload" accept=".csv" style="display:none">
     <input type="file" id="csvTbaReload" accept=".csv" style="display:none">
-    <input type="file" id="photosReload" accept="image/*" multiple style="display:none">
+    <input type="file" id="photosReload" accept="image/*,.jpg,.jpeg,.png,.gif,.webp" multiple style="display:none">
   </div>
 </header>
 
@@ -2196,7 +2212,11 @@ function renderProfile(t) {
   var teamName = teamNames[t.team] || '';
   var photoHTML = robotPhotos[t.team]
     ? '<img class="robot-photo" src="'+robotPhotos[t.team]+'" alt="Robot '+t.team+'">'
-    : '<div class="robot-photo-placeholder">NO PHOTO<br>NAME FILE '+t.team+'.JPG</div>';
+    : '<label class="robot-photo-placeholder" for="photosReload" title="Tap to load robot photos">'+
+        '<span style="font-size:22px">&#128247;</span>'+
+        '<span>NO PHOTO</span>'+
+        '<span style="font-size:10px;opacity:0.6">Tap to load &bull; name file '+t.team+'.jpg</span>'+
+      '</label>';
 
   document.getElementById('profileResult').innerHTML =
     '<div class="panel" style="margin-bottom:16px;">' +
