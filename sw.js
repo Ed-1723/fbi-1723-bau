@@ -1,7 +1,7 @@
-// BAU Field Analysis System — Service Worker v3
+// BAU Field Analysis System — Service Worker v4
 // FBI First Bots of Independence 1723
 
-const CACHE_NAME = 'bau-field-v3';
+const CACHE_NAME = 'bau-field-v4';
 const BASE = '/fbi-1723-bau';
 const ASSETS = [
   BASE + '/',
@@ -14,7 +14,7 @@ const ASSETS = [
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      console.log('BAU: Caching v3 assets');
+      console.log('BAU: Caching v4 assets');
       return cache.addAll(ASSETS);
     })
   );
@@ -44,7 +44,9 @@ self.addEventListener('fetch', function(event) {
         if (response && response.status === 200) {
           var copy = response.clone();
           caches.open(CACHE_NAME).then(function(cache) {
-            cache.put(event.request, copy);
+            cache.put(event.request, copy).catch(function(err) {
+              console.warn('BAU: Cache put failed:', err);
+            });
           });
         }
         return response;
