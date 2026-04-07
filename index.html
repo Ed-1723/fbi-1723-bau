@@ -990,6 +990,7 @@ header {
 .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
 /* ===== RESPONSIVE ===== */
+/* Tablet portrait and small screens */
 @media (max-width: 900px) {
   .alliance-grid, .two-col, .bd-grid { grid-template-columns: 1fr; }
   .profile-header { grid-template-columns: 1fr; }
@@ -1001,6 +1002,30 @@ header {
   .stat-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 }
 
+/* Tablet landscape — wide but shorter, 3-col causes overlap */
+@media (max-width: 1200px) and (orientation: landscape) {
+  .profile-header-3col {
+    grid-template-columns: 160px 130px 1fr;
+    gap: 12px;
+  }
+  .team-number { font-size: 60px; }
+  .robot-photo, .robot-photo-placeholder { max-height: 140px; }
+  .stat-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
+  .stat-box { padding: 8px 10px; }
+  .stat-box-val { font-size: 24px; }
+}
+
+/* Also catch landscape tablets that are exactly around 1024px */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .profile-header-3col {
+    grid-template-columns: 150px 120px 1fr;
+    gap: 10px;
+  }
+  .team-number { font-size: 56px; }
+  .robot-photo, .robot-photo-placeholder { max-height: 130px; }
+}
+
+/* Phone portrait */
 @media (max-width: 600px) {
   .profile-header-3col { grid-template-columns: 1fr; }
   .team-number { font-size: 52px; }
@@ -1790,14 +1815,7 @@ setupFileInput('csvMatchReload', function(text) {
 
 // Wire photos reload button (header)
 setupFileInput('photosReload', function() {}); // handled separately via change event
-document.addEventListener('DOMContentLoaded', function() {
-  var photosInput = document.getElementById('photosReload');
-  if (photosInput) {
-    photosInput.addEventListener('change', function(e) {
-      handlePhotoFiles(e.target.files);
-    });
-  }
-});
+// photosReload wired in setupPhotoUpload()
 
 // Clear all data from localStorage
 function clearAllData() {
@@ -1847,8 +1865,12 @@ function handlePhotoFiles(fileList) {
         var el = document.getElementById(id);
         if (el) el.textContent = loaded + ' photo' + (loaded>1?'s':'') + ' loaded';
       });
+      // Refresh profile if this team or any team is currently shown
       var v = document.getElementById('teamInput');
-      if (v && v.value.trim() === team) onSearch(team);
+      if (v && v.value.trim()) {
+        // Always refresh — photo may have loaded for current team
+        onSearch(v.value.trim());
+      }
     };
     reader.readAsDataURL(file);
   });
@@ -1860,6 +1882,13 @@ function setupPhotoUpload() {
   var inp = document.getElementById('photoUpload');
   if (inp) {
     inp.addEventListener('change', function(e) {
+      handlePhotoFiles(e.target.files);
+    });
+  }
+  // Also wire photosReload here (belt and suspenders)
+  var inp2 = document.getElementById('photosReload');
+  if (inp2) {
+    inp2.addEventListener('change', function(e) {
       handlePhotoFiles(e.target.files);
     });
   }
