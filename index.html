@@ -1249,7 +1249,6 @@ body.tablet-landscape .stat-box-label {
 
 <!-- ===== SUBJECT PROFILE ===== -->
 <div class="content active" id="tab-search">
-  <div id="photoDebug" style="display:none;background:#1a0a00;border:1px solid var(--orange);border-radius:3px;padding:8px 14px;margin-bottom:12px;font-family:'Courier New',monospace;font-size:12px;color:var(--orange);line-height:1.8;"></div>
   <div class="search-row">
     <input type="text" class="s-input" id="teamInput" placeholder="TEAM #" oninput="onSearch(this.value)">
     <select class="s-select" id="teamSel" onchange="onSelect(this.value)">
@@ -1884,60 +1883,62 @@ function triggerPhotoUpload() {
   if (inp) inp.click();
 }
 
-function handlePhotoFiles(fileList) {
+// Track whether photo upload was triggered from a team profile context
+var _photoTargetTeam = null;
+
+function handlePhotoFiles(fileList, targetTeam) {
   var files = Array.from(fileList);
-  var loaded = 0;
-  var skipped = 0;
+  if (files.length === 0) return;
 
-  // Show debug panel
+  // Hide debug panel
   var dbg = document.getElementById('photoDebug');
-  if (dbg) {
-    dbg.style.display = 'block';
-    dbg.textContent = 'PHOTO LOAD STARTED: ' + files.length + ' file(s) selected';
-  }
+  if (dbg) dbg.style.display = 'none';
 
-  if (files.length === 0) {
-    if (dbg) dbg.textContent = 'ERROR: No files in fileList';
-    return;
-  }
+  // If a targetTeam was passed (from placeholder click), use it directly
+  // Otherwise try filename, then fall back to currently viewed team
+  var contextTeam = targetTeam || _photoTargetTeam || null;
+  _photoTargetTeam = null;
 
+  var loaded = 0;
   files.forEach(function(file) {
-    var rawName = file.name;
-    var team = rawName.replace(/\.[^.]+$/, '').trim();
-    var isNum = !isNaN(parseInt(team));
-
-    if (dbg) dbg.innerHTML += '<br>FILE: ' + rawName + ' → team=' + team + ' valid=' + isNum;
-
-    if (!team || !isNum) { skipped++; return; }
-    team = String(parseInt(team));
-
     var reader = new FileReader();
-    reader.onerror = function() {
-      if (dbg) dbg.innerHTML += '<br>READ ERROR for ' + rawName;
-    };
     reader.onload = function(ev) {
-      var dataLen = ev.target.result ? ev.target.result.length : 0;
-      robotPhotos[team] = ev.target.result;
-      loaded++;
+      var data = ev.target.result;
 
-      if (dbg) dbg.innerHTML += '<br>LOADED team=' + team + ' dataLen=' + dataLen + ' total=' + Object.keys(robotPhotos).length;
+      // Determine which team this photo belongs to
+      var assignTeam = null;
+
+      if (contextTeam && files.length === 1) {
+        // Single photo selected from a team's placeholder — assign to that team
+        assignTeam = contextTeam;
+      } else {
+        // Multiple photos or header button — try filename matching first
+        var rawName = file.name;
+        var fromName = rawName.replace(/\.[^.]+$/, '').trim();
+        if (!isNaN(parseInt(fromName)) && fromName.length >= 3 && fromName.length <= 5) {
+          assignTeam = String(parseInt(fromName));
+        } else if (contextTeam && files.length === 1) {
+          // Filename didn't work, use context team
+          assignTeam = contextTeam;
+        } else {
+          // Can't determine team — skip
+          return;
+        }
+      }
+
+      robotPhotos[assignTeam] = data;
+      loaded++;
 
       ['photoStatus','photoStatus2'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) { el.textContent = loaded + ' photo(s) loaded'; el.style.color = 'var(--accent)'; }
       });
 
-      // Refresh profile
+      // Refresh profile if this team is currently shown
       var v = document.getElementById('teamInput');
       var currentTeam = v ? v.value.trim() : '';
-      if (dbg) dbg.innerHTML += '<br>CURRENT TEAM IN INPUT: "' + currentTeam + '"';
-      if (currentTeam) {
-        var t = findTeam(currentTeam);
-        if (dbg) dbg.innerHTML += '<br>findTeam result: ' + (t ? 'FOUND' : 'NOT FOUND');
-        if (t) {
-          renderProfile(t);
-          if (dbg) dbg.innerHTML += '<br>renderProfile called for ' + currentTeam;
-        }
+      if (currentTeam && findTeam(currentTeam)) {
+        renderProfile(findTeam(currentTeam));
       }
     };
     reader.readAsDataURL(file);
@@ -2305,10 +2306,12 @@ function renderProfile(t) {
   var teamName = teamNames[t.team] || '';
   var photoHTML = robotPhotos[t.team]
     ? '<img class="robot-photo" src="'+robotPhotos[t.team]+'" alt="Robot '+t.team+'">'
-    : '<label class="robot-photo-placeholder" for="profilePhotoUpload" title="Tap to load robot photos">'+
+    : '<label class="robot-photo-placeholder" for="profilePhotoUpload" '+
+        'onclick="_photoTargetTeam=\''+t.team+'\';" '+
+        'title="Tap to load a photo for team '+t.team+'">'+
         '<span style="font-size:28px">&#128247;</span>'+
-        '<span>NO PHOTO</span>'+
-        '<span style="font-size:10px;opacity:0.6">Tap to load &bull; name '+t.team+'.jpeg</span>'+
+        '<span style="font-size:14px;font-weight:bold">TAP TO ADD PHOTO</span>'+
+        '<span style="font-size:11px;opacity:0.7">Team '+t.team+'</span>'+
       '</label>';
 
   document.getElementById('profileResult').innerHTML =
