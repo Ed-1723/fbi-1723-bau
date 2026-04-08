@@ -1220,7 +1220,7 @@ body.tablet-landscape .stat-box-label {
       <div class="h-logo">BAU <span>FIELD</span></div>
       <div style="font-family:'Courier New',Courier,monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:-2px">FIRST BOTS OF INDEPENDENCE</div>
     </div>
-    <div class="h-badge">REBUILT 2026</div>
+    <div class="h-badge">REBUILT 2026 // v5</div>
   </div>
   <div class="h-right">
     <div class="h-status match" id="hMatch">MATCH: —</div>
@@ -1256,6 +1256,7 @@ body.tablet-landscape .stat-box-label {
     </select>
   </div>
   <div id="profileResult">
+<input type="file" id="profilePhotoUpload" accept="image/*,.jpg,.jpeg,.png,.gif,.webp" multiple style="display:none">
     <div class="empty"><h3>NO SUBJECT SELECTED</h3><p>Enter a team number or select from the dropdown to open their field profile.</p></div>
   </div>
 </div>
@@ -1913,19 +1914,25 @@ function handlePhotoFiles(fileList) {
 
 // Robot photo upload — match by filename e.g. 1723.jpg
 function setupPhotoUpload() {
-  // Wire overlay photo input
-  var inp = document.getElementById('photoUpload');
-  if (inp) {
+  // Wire all photo file inputs
+  ['photoUpload', 'photosReload', 'profilePhotoUpload'].forEach(function(id) {
+    var inp = document.getElementById(id);
+    if (inp) {
+      inp.addEventListener('change', function(e) {
+        handlePhotoFiles(e.target.files);
+      });
+    }
+  });
+}
+
+// Re-wire profilePhotoUpload after profile renders (it's inside profileResult)
+function rewireProfilePhotoInput() {
+  var inp = document.getElementById('profilePhotoUpload');
+  if (inp && !inp._wired) {
     inp.addEventListener('change', function(e) {
       handlePhotoFiles(e.target.files);
     });
-  }
-  // Also wire photosReload here (belt and suspenders)
-  var inp2 = document.getElementById('photosReload');
-  if (inp2) {
-    inp2.addEventListener('change', function(e) {
-      handlePhotoFiles(e.target.files);
-    });
+    inp._wired = true;
   }
 }
 
@@ -2276,11 +2283,11 @@ function renderProfile(t) {
   var teamName = teamNames[t.team] || '';
   var photoHTML = robotPhotos[t.team]
     ? '<img class="robot-photo" src="'+robotPhotos[t.team]+'" alt="Robot '+t.team+'">'
-    : '<div class="robot-photo-placeholder" onclick="triggerPhotoUpload()" title="Tap to load robot photos">'+
+    : '<label class="robot-photo-placeholder" for="profilePhotoUpload" title="Tap to load robot photos">'+
         '<span style="font-size:28px">&#128247;</span>'+
         '<span>NO PHOTO</span>'+
-        '<span style="font-size:10px;opacity:0.6">Tap to load &bull; name file '+t.team+'.jpeg</span>'+
-      '</div>';
+        '<span style="font-size:10px;opacity:0.6">Tap to load &bull; name '+t.team+'.jpeg</span>'+
+      '</label>';
 
   document.getElementById('profileResult').innerHTML =
     '<div class="panel" style="margin-bottom:16px;">' +
@@ -2346,6 +2353,7 @@ function renderProfile(t) {
       '<div>'+mhRows+'</div>' +
     '</div>';
 }
+  rewireProfilePhotoInput();
 
 function statBox(label, val, colorCls, sub) {
   return '<div class="stat-box"><div class="stat-box-label">'+label+'</div><div class="stat-box-val '+colorCls+'">'+val+'</div><div class="stat-box-sub">'+sub+'</div></div>';
