@@ -1364,12 +1364,15 @@ var OUR_TEAM = '1723';
 // ============================================================
 // LOCALSTORAGE PERSISTENCE
 // ============================================================
-var LS_MATCH = 'bau_match_csv';
-var LS_PIT   = 'bau_pit_csv';
-var LS_TBA   = 'bau_tba_csv';
-var LS_STATE = 'bau_sel_state';
-var LS_OUR   = 'bau_our_team';
-var LS_NAMES = 'bau_team_names';
+var LS_MATCH   = 'bau_match_csv';
+var LS_PIT     = 'bau_pit_csv';
+var LS_TBA     = 'bau_tba_csv';
+var LS_STATE   = 'bau_sel_state';
+var LS_OUR     = 'bau_our_team';
+var LS_NAMES   = 'bau_team_names';
+var LS_SCHED   = 'bau_schedule';
+var LS_PHOTOS  = 'bau_photos';
+var LS_SCHEDMY = 'bau_my_team';
 
 function saveToStorage(key, val) {
   try { localStorage.setItem(key, val); } catch(e) { console.warn('Storage full:', e); }
@@ -1423,6 +1426,38 @@ function restoreSession() {
   // Restore our team
   var ot = loadFromStorage(LS_OUR);
   if (ot) OUR_TEAM = ot;
+
+  // Restore photos
+  var ph = loadFromStorage(LS_PHOTOS);
+  if (ph) {
+    try {
+      robotPhotos = JSON.parse(ph);
+      var pn = Object.keys(robotPhotos).length;
+      ['photoStatus','photoStatus2'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) { el.textContent = pn + ' photo(s) loaded'; el.style.color = 'var(--accent)'; }
+      });
+    } catch(e) { robotPhotos = {}; }
+  }
+
+  // Restore schedule
+  var sc = loadFromStorage(LS_SCHED);
+  var myT = loadFromStorage(LS_SCHEDMY) || '';
+  if (sc) {
+    try {
+      scheduleData = JSON.parse(sc);
+      var schedEl = document.getElementById('schedStatus');
+      if (schedEl) schedEl.textContent = scheduleData.length + ' matches restored';
+      // Re-render schedule cards
+      setTimeout(function() {
+        var grid = document.getElementById('schedGrid');
+        if (grid && scheduleData.length > 0) {
+          renderSchedule(myT);
+          grid.style.display = 'grid';
+        }
+      }, 100);
+    } catch(e) { scheduleData = []; }
+  }
 
   // If we have match data, blend and proceed
   if (Object.keys(teamMap).length > 0) {
@@ -1855,6 +1890,9 @@ function clearAllData() {
     localStorage.removeItem(LS_STATE);
     localStorage.removeItem(LS_OUR);
     localStorage.removeItem(LS_NAMES);
+    localStorage.removeItem(LS_SCHED);
+    localStorage.removeItem(LS_PHOTOS);
+    localStorage.removeItem(LS_SCHEDMY);
   } catch(e) {}
   matchRows = []; pitMap = {}; tbaMap = {}; teamMap = {};
   scheduleData = []; selectionState = {}; teamNames = {}; robotPhotos = {};
@@ -1929,6 +1967,13 @@ function handlePhotoFiles(fileList, targetTeam) {
       robotPhotos[assignTeam] = data;
       loaded++;
 
+      // Persist photos to localStorage (try — may fail if storage full)
+      try {
+        localStorage.setItem(LS_PHOTOS, JSON.stringify(robotPhotos));
+      } catch(e) {
+        console.warn('BAU: Photo storage full, photos will not persist across refresh');
+      }
+
       ['photoStatus','photoStatus2'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) { el.textContent = loaded + ' photo(s) loaded'; el.style.color = 'var(--accent)'; }
@@ -1948,14 +1993,23 @@ function handlePhotoFiles(fileList, targetTeam) {
 // Robot photo upload — match by filename e.g. 1723.jpg
 function setupPhotoUpload() {
   // Wire all photo file inputs
-  ['photoUpload', 'photosReload', 'profilePhotoUpload'].forEach(function(id) {
+  // profilePhotoUpload is context-aware — passes current team
+  ['photoUpload', 'photosReload'].forEach(function(id) {
     var inp = document.getElementById(id);
     if (inp) {
       inp.addEventListener('change', function(e) {
-        handlePhotoFiles(e.target.files);
+        handlePhotoFiles(e.target.files, null);
       });
     }
   });
+  // profilePhotoUpload uses _photoTargetTeam set by placeholder onclick
+  var profInp = document.getElementById('profilePhotoUpload');
+  if (profInp) {
+    profInp.addEventListener('change', function(e) {
+      handlePhotoFiles(e.target.files, _photoTargetTeam);
+      _photoTargetTeam = null;
+    });
+  }
 }
 
 
@@ -2529,7 +2583,14 @@ function pullSchedule() {
       schedEl.textContent = allQuals.length + ' qual matches loaded';
     }
 
+    // Save schedule and my team to localStorage
+    try {
+      localStorage.setItem(LS_SCHED, JSON.stringify(scheduleData));
+      if (myTeam) localStorage.setItem(LS_SCHEDMY, myTeam);
+    } catch(e) { console.warn('BAU: Could not save schedule'); }
+
     renderSchedule(myTeam);
+    document.getElementById('schedStatus').textContent = scheduleData.length + ' matches for Team ' + (myTeam || 'all');
     // Also refresh any open profile to show team name
     var v = document.getElementById('teamInput');
     if (v && v.value) onSearch(v.value);
