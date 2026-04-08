@@ -1102,6 +1102,33 @@ header {
   margin-left: 6px;
 }
 
+/* JS-driven tablet landscape class */
+body.tablet-landscape .profile-header-3col {
+  grid-template-columns: 150px 120px 1fr !important;
+  gap: 10px !important;
+}
+body.tablet-landscape .team-number {
+  font-size: 54px !important;
+}
+body.tablet-landscape .robot-photo,
+body.tablet-landscape .robot-photo-placeholder {
+  max-height: 130px !important;
+  height: 130px !important;
+}
+body.tablet-landscape .stat-grid {
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+  gap: 6px !important;
+}
+body.tablet-landscape .stat-box {
+  padding: 7px 10px !important;
+}
+body.tablet-landscape .stat-box-val {
+  font-size: 22px !important;
+}
+body.tablet-landscape .stat-box-label {
+  font-size: 10px !important;
+}
+
 /* Clickable team numbers */
 .clickable-team {
   cursor: pointer;
@@ -1850,6 +1877,11 @@ setupFileInput('csvTbaReload', function(text) {
 });
 
 // Shared photo file handler
+function triggerPhotoUpload() {
+  var inp = document.getElementById('photosReload');
+  if (inp) inp.click();
+}
+
 function handlePhotoFiles(fileList) {
   var files = Array.from(fileList);
   var loaded = 0;
@@ -1865,11 +1897,14 @@ function handlePhotoFiles(fileList) {
         var el = document.getElementById(id);
         if (el) el.textContent = loaded + ' photo' + (loaded>1?'s':'') + ' loaded';
       });
-      // Refresh profile if this team or any team is currently shown
+      // Refresh profile — force re-render of current team if one is shown
       var v = document.getElementById('teamInput');
       if (v && v.value.trim()) {
-        // Always refresh — photo may have loaded for current team
-        onSearch(v.value.trim());
+        var currentTeam = v.value.trim();
+        var t = findTeam(currentTeam);
+        if (t) {
+          renderProfile(t); // direct call, bypasses any guard conditions
+        }
       }
     };
     reader.readAsDataURL(file);
@@ -2241,11 +2276,11 @@ function renderProfile(t) {
   var teamName = teamNames[t.team] || '';
   var photoHTML = robotPhotos[t.team]
     ? '<img class="robot-photo" src="'+robotPhotos[t.team]+'" alt="Robot '+t.team+'">'
-    : '<label class="robot-photo-placeholder" for="photosReload" title="Tap to load robot photos">'+
-        '<span style="font-size:22px">&#128247;</span>'+
+    : '<div class="robot-photo-placeholder" onclick="triggerPhotoUpload()" title="Tap to load robot photos">'+
+        '<span style="font-size:28px">&#128247;</span>'+
         '<span>NO PHOTO</span>'+
-        '<span style="font-size:10px;opacity:0.6">Tap to load &bull; name file '+t.team+'.jpg</span>'+
-      '</label>';
+        '<span style="font-size:10px;opacity:0.6">Tap to load &bull; name file '+t.team+'.jpeg</span>'+
+      '</div>';
 
   document.getElementById('profileResult').innerHTML =
     '<div class="panel" style="margin-bottom:16px;">' +
@@ -2733,6 +2768,25 @@ function resetSelection() {
 window.addEventListener('load', function() {
   setupPhotoUpload();
   restoreSession();
+  checkOrientation();
+});
+
+function checkOrientation() {
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+  var isLandscape = w > h;
+  var isTablet = Math.max(w,h) >= 768 && Math.max(w,h) <= 1400;
+  var body = document.body;
+  if (isLandscape && isTablet) {
+    body.classList.add('tablet-landscape');
+  } else {
+    body.classList.remove('tablet-landscape');
+  }
+}
+
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', function() {
+  setTimeout(checkOrientation, 200); // wait for resize to settle
 });
 </script>
 <script>
