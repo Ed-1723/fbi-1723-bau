@@ -1220,7 +1220,7 @@ body.tablet-landscape .stat-box-label {
       <div class="h-logo">BAU <span>FIELD</span></div>
       <div style="font-family:'Courier New',Courier,monospace;font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:-2px">FIRST BOTS OF INDEPENDENCE</div>
     </div>
-    <div class="h-badge">REBUILT 2026 // v7</div>
+    <div class="h-badge">REBUILT 2026 // v11</div>
   </div>
   <div class="h-right">
     <div class="h-status match" id="hMatch">MATCH: —</div>
@@ -1228,7 +1228,6 @@ body.tablet-landscape .stat-box-label {
     <div class="h-status tba" id="hTba">TBA: —</div>
     <label class="reload-all-btn" for="csvMatchReload" title="Reload match data">&#8635; MATCH</label>
     <label class="reload-all-btn" for="csvTbaReload" title="Reload TBA data">&#8635; TBA</label>
-    <label class="reload-all-btn" for="photosReload" title="Load robot photos" style="border-color:var(--orange);color:var(--orange)">&#8635; PHOTOS</label>
     <button class="reload-all-btn" onclick="clearAllData()" title="Clear all saved data and reload" style="border-color:var(--red);color:var(--red)">&#10005; CLEAR</button>
     <input type="file" id="csvMatchReload" accept=".csv" style="display:none">
     <input type="file" id="csvTbaReload" accept=".csv" style="display:none">
@@ -1382,7 +1381,7 @@ function loadFromStorage(key) {
   try { return localStorage.getItem(key); } catch(e) { return null; }
 }
 
-var DATA_VERSION = 'v7'; // bump this to force clear stale localStorage
+var DATA_VERSION = 'v11'; // bump this to force clear stale localStorage
 var LS_VERSION = 'bau_data_version';
 
 function restoreSession() {
@@ -1924,16 +1923,30 @@ function triggerPhotoUpload() {
 // Track whether photo upload was triggered from a team profile context
 var _photoTargetTeam = null;
 
+// Compress image to max 400px wide JPEG at 75% quality using Canvas
+// Reduces typical robot photo from 2-4MB to ~20-40KB
+function compressPhoto(dataURL, callback) {
+  var img = new Image();
+  img.onload = function() {
+    var maxW = 400;
+    var scale = Math.min(1, maxW / img.width);
+    var w = Math.round(img.width * scale);
+    var h = Math.round(img.height * scale);
+    var canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    callback(canvas.toDataURL('image/jpeg', 0.75));
+  };
+  img.onerror = function() { callback(dataURL); }; // fallback to original
+  img.src = dataURL;
+}
+
 function handlePhotoFiles(fileList, targetTeam) {
   var files = Array.from(fileList);
   if (files.length === 0) return;
 
-  // Hide debug panel
-  var dbg = document.getElementById('photoDebug');
-  if (dbg) dbg.style.display = 'none';
-
-  // If a targetTeam was passed (from placeholder click), use it directly
-  // Otherwise try filename, then fall back to currently viewed team
   var contextTeam = targetTeam || _photoTargetTeam || null;
   _photoTargetTeam = null;
 
@@ -1941,50 +1954,49 @@ function handlePhotoFiles(fileList, targetTeam) {
   files.forEach(function(file) {
     var reader = new FileReader();
     reader.onload = function(ev) {
-      var data = ev.target.result;
+      var rawData = ev.target.result;
 
-      // Determine which team this photo belongs to
+      // Determine team assignment
       var assignTeam = null;
-
       if (contextTeam && files.length === 1) {
-        // Single photo selected from a team's placeholder — assign to that team
         assignTeam = contextTeam;
       } else {
-        // Multiple photos or header button — try filename matching first
         var rawName = file.name;
         var fromName = rawName.replace(/\.[^.]+$/, '').trim();
         if (!isNaN(parseInt(fromName)) && fromName.length >= 3 && fromName.length <= 5) {
           assignTeam = String(parseInt(fromName));
-        } else if (contextTeam && files.length === 1) {
-          // Filename didn't work, use context team
+        } else if (contextTeam) {
           assignTeam = contextTeam;
         } else {
-          // Can't determine team — skip
-          return;
+          return; // can't determine team, skip
         }
       }
 
-      robotPhotos[assignTeam] = data;
-      loaded++;
+      // Compress before storing
+      var team = assignTeam;
+      compressPhoto(rawData, function(compressed) {
+        robotPhotos[team] = compressed;
+        loaded++;
 
-      // Persist photos to localStorage (try — may fail if storage full)
-      try {
-        localStorage.setItem(LS_PHOTOS, JSON.stringify(robotPhotos));
-      } catch(e) {
-        console.warn('BAU: Photo storage full, photos will not persist across refresh');
-      }
+        // Persist to localStorage
+        try {
+          localStorage.setItem(LS_PHOTOS, JSON.stringify(robotPhotos));
+        } catch(e) {
+          console.warn('BAU: Photo storage full');
+        }
 
-      ['photoStatus','photoStatus2'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) { el.textContent = loaded + ' photo(s) loaded'; el.style.color = 'var(--accent)'; }
+        ['photoStatus','photoStatus2'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) { el.textContent = loaded + ' photo(s) loaded'; el.style.color = 'var(--accent)'; }
+        });
+
+        // Refresh profile if this team is currently shown
+        var v = document.getElementById('teamInput');
+        var currentTeam = v ? v.value.trim() : '';
+        if (currentTeam && findTeam(currentTeam)) {
+          renderProfile(findTeam(currentTeam));
+        }
       });
-
-      // Refresh profile if this team is currently shown
-      var v = document.getElementById('teamInput');
-      var currentTeam = v ? v.value.trim() : '';
-      if (currentTeam && findTeam(currentTeam)) {
-        renderProfile(findTeam(currentTeam));
-      }
     };
     reader.readAsDataURL(file);
   });
