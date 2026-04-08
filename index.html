@@ -1249,6 +1249,7 @@ body.tablet-landscape .stat-box-label {
 
 <!-- ===== SUBJECT PROFILE ===== -->
 <div class="content active" id="tab-search">
+  <div id="photoDebug" style="display:none;background:#1a0a00;border:1px solid var(--orange);border-radius:3px;padding:8px 14px;margin-bottom:12px;font-family:'Courier New',monospace;font-size:12px;color:var(--orange);line-height:1.8;"></div>
   <div class="search-row">
     <input type="text" class="s-input" id="teamInput" placeholder="TEAM #" oninput="onSearch(this.value)">
     <select class="s-select" id="teamSel" onchange="onSelect(this.value)">
@@ -1886,29 +1887,56 @@ function triggerPhotoUpload() {
 function handlePhotoFiles(fileList) {
   var files = Array.from(fileList);
   var loaded = 0;
+  var skipped = 0;
+
+  // Show debug panel
+  var dbg = document.getElementById('photoDebug');
+  if (dbg) {
+    dbg.style.display = 'block';
+    dbg.textContent = 'PHOTO LOAD STARTED: ' + files.length + ' file(s) selected';
+  }
+
+  if (files.length === 0) {
+    if (dbg) dbg.textContent = 'ERROR: No files in fileList';
+    return;
+  }
+
   files.forEach(function(file) {
-    var team = file.name.replace(/\.[^.]+$/, '').trim();
-    if (!team || isNaN(parseInt(team))) return;
+    var rawName = file.name;
+    var team = rawName.replace(/\.[^.]+$/, '').trim();
+    var isNum = !isNaN(parseInt(team));
+
+    if (dbg) dbg.innerHTML += '<br>FILE: ' + rawName + ' → team=' + team + ' valid=' + isNum;
+
+    if (!team || !isNum) { skipped++; return; }
     team = String(parseInt(team));
+
     var reader = new FileReader();
+    reader.onerror = function() {
+      if (dbg) dbg.innerHTML += '<br>READ ERROR for ' + rawName;
+    };
     reader.onload = function(ev) {
+      var dataLen = ev.target.result ? ev.target.result.length : 0;
       robotPhotos[team] = ev.target.result;
       loaded++;
+
+      if (dbg) dbg.innerHTML += '<br>LOADED team=' + team + ' dataLen=' + dataLen + ' total=' + Object.keys(robotPhotos).length;
+
       ['photoStatus','photoStatus2'].forEach(function(id) {
         var el = document.getElementById(id);
-        if (el) {
-          el.textContent = loaded + ' photo' + (loaded>1?'s':'') + ' loaded';
-          el.style.color = 'var(--accent)';
-        }
+        if (el) { el.textContent = loaded + ' photo(s) loaded'; el.style.color = 'var(--accent)'; }
       });
-      console.log('BAU: Photo loaded for team', team, '- robotPhotos keys:', Object.keys(robotPhotos));
-      // Refresh profile — force re-render of current team if one is shown
+
+      // Refresh profile
       var v = document.getElementById('teamInput');
-      if (v && v.value.trim()) {
-        var currentTeam = v.value.trim();
+      var currentTeam = v ? v.value.trim() : '';
+      if (dbg) dbg.innerHTML += '<br>CURRENT TEAM IN INPUT: "' + currentTeam + '"';
+      if (currentTeam) {
         var t = findTeam(currentTeam);
+        if (dbg) dbg.innerHTML += '<br>findTeam result: ' + (t ? 'FOUND' : 'NOT FOUND');
         if (t) {
-          renderProfile(t); // direct call, bypasses any guard conditions
+          renderProfile(t);
+          if (dbg) dbg.innerHTML += '<br>renderProfile called for ' + currentTeam;
         }
       }
     };
