@@ -1255,8 +1255,8 @@ body.tablet-landscape .stat-box-label {
       <option value="">— SELECT SUBJECT —</option>
     </select>
   </div>
+  <input type="file" id="profilePhotoUpload" accept="image/*,.jpg,.jpeg,.png,.gif,.webp" multiple style="display:none">
   <div id="profileResult">
-<input type="file" id="profilePhotoUpload" accept="image/*,.jpg,.jpeg,.png,.gif,.webp" multiple style="display:none">
     <div class="empty"><h3>NO SUBJECT SELECTED</h3><p>Enter a team number or select from the dropdown to open their field profile.</p></div>
   </div>
 </div>
@@ -1896,8 +1896,12 @@ function handlePhotoFiles(fileList) {
       loaded++;
       ['photoStatus','photoStatus2'].forEach(function(id) {
         var el = document.getElementById(id);
-        if (el) el.textContent = loaded + ' photo' + (loaded>1?'s':'') + ' loaded';
+        if (el) {
+          el.textContent = loaded + ' photo' + (loaded>1?'s':'') + ' loaded';
+          el.style.color = 'var(--accent)';
+        }
       });
+      console.log('BAU: Photo loaded for team', team, '- robotPhotos keys:', Object.keys(robotPhotos));
       // Refresh profile — force re-render of current team if one is shown
       var v = document.getElementById('teamInput');
       if (v && v.value.trim()) {
@@ -1925,16 +1929,6 @@ function setupPhotoUpload() {
   });
 }
 
-// Re-wire profilePhotoUpload after profile renders (it's inside profileResult)
-function rewireProfilePhotoInput() {
-  var inp = document.getElementById('profilePhotoUpload');
-  if (inp && !inp._wired) {
-    inp.addEventListener('change', function(e) {
-      handlePhotoFiles(e.target.files);
-    });
-    inp._wired = true;
-  }
-}
 
 function checkProceed() {
   var btn = document.getElementById('proceedBtn');
@@ -2353,7 +2347,6 @@ function renderProfile(t) {
       '<div>'+mhRows+'</div>' +
     '</div>';
 }
-  rewireProfilePhotoInput();
 
 function statBox(label, val, colorCls, sub) {
   return '<div class="stat-box"><div class="stat-box-label">'+label+'</div><div class="stat-box-val '+colorCls+'">'+val+'</div><div class="stat-box-sub">'+sub+'</div></div>';

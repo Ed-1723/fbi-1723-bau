@@ -1,5 +1,5 @@
-// BAU Field Analysis System — Service Worker v6
-const CACHE_NAME = 'bau-field-v6';
+// BAU Field Analysis System — Service Worker v7
+const CACHE_NAME = 'bau-field-v7';
 const BASE = '/fbi-1723-bau';
 const ASSETS = [BASE+'/',BASE+'/index.html',BASE+'/manifest.json',BASE+'/icon-192.png',BASE+'/icon-512.png'];
 self.addEventListener('install', function(e){ e.waitUntil(caches.open(CACHE_NAME).then(function(c){ return c.addAll(ASSETS); })); self.skipWaiting(); });
